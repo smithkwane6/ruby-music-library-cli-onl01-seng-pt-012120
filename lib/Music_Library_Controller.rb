@@ -3,14 +3,14 @@ class MusicLibraryController
 
   def initialize(path = './db/mp3s')
     music_importer = MusicImporter.new(path)
-    music_importer.import 
+    music_importer.import
   end
 
 
 
-   def call 
-      input = nil 
-      until input == "exit" 
+   def call
+      input = nil
+      until input == "exit"
         puts "Welcome to your music library!"
         puts "To list all of your songs, enter 'list songs'."
         puts "To list all of the artists in your library, enter 'list artists'."
@@ -28,47 +28,47 @@ class MusicLibraryController
         list_songs_by_artist if input == "list artist"
         list_songs_by_genre if input == "list genre"
         play_song if input == "play song"
-      end 
+      end
 
-    end 
+    end
 
     def list_songs
       alphabetized_list = Song.all.sort{|a,b| a.name <=> b.name}.each_with_index{|file,index| puts "#{index +1}. #{file.artist.name} - #{file.name} - #{file.genre.name}"}
-    end 
+    end
 
-    def list_artists 
+    def list_artists
       Artist.all.sort{|a,b| a.name <=> b.name}.each_with_index{|artist,index| puts "#{index +1}. #{artist.name}"}
-    end 
+    end
 
-    def list_genres 
+    def list_genres
       Genre.all.sort{|a,b| a.name <=> b.name}.each_with_index{|genre,index| puts "#{index +1}. #{genre.name}"}
-    end 
+    end
 
     def list_songs_by_artist
       puts "Please enter the name of an artist:"
-      artist_name = gets.strip 
+      artist_name = gets.strip
       if artist = Artist.find_by_name(artist_name)
         artist.songs.sort{|a, b| a.name <=> b.name}.each.with_index{|song, index| puts "#{index + 1}. #{song.name} - #{song.genre.name}"}
-      end 
+      end
       #why do i have to put variable artist in order to call artist.songs without getting a no method error?
-    end 
+    end
 
     def list_songs_by_genre
       puts "Please enter the name of a genre:"
-      genre_name = gets.strip 
+      genre_name = gets.strip
       if genre = Genre.find_by_name(genre_name)
         genre.songs.sort{|a, b| a.name <=> b.name}.each.with_index{|song, index| puts "#{index + 1}. #{song.artist.name} - #{song.name}"}
-      end 
-    end 
+      end
+    end
 
-    def play_song 
+    def play_song
       puts "Which song number would you like to play?"
       song_number = gets.strip.to_i - 1
       alphabetized_list = Song.all.sort{|a,b| a.name <=> b.name}
-      if song_number > 1 && song_number < alphabetized_list.length 
+      if song_number > 1 && song_number < alphabetized_list.length
         song = alphabetized_list[song_number]
         puts "Playing #{song.name} by #{song.artist.name}"
-      end 
-    end 
+      end
+    end
 
 end  
