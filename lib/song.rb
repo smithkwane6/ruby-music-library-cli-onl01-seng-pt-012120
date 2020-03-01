@@ -8,47 +8,47 @@ class Song
     @name = name
     self.artist = artist if artist != nil
     self.genre = genre if genre != nil
-  end 
+  end
 
   def self.all
     @@all
-  end 
+  end
 
-  def save 
+  def save
     @@all << self
-  end 
+  end
 
   def self.destroy_all
-    @@all.clear 
-  end 
+    @@all.clear
+  end
 
   def self.create(name)
     new_song = Song.new(name)
     new_song.save
-    new_song 
-  end 
+    new_song
+  end
 
   def artist=(artist)
-    @artist = artist 
+    @artist = artist
     @artist.add_song(self)
-  end 
+  end
 
   def genre=(genre)
     @genre = genre
-    @genre.songs << self if @genre.songs.include?(self) == false 
-  end 
+    @genre.songs << self if @genre.songs.include?(self) == false
+  end
 
   def self.find_by_name(name)
     self.all.find {|song| song.name == name}
-  end 
+  end
 
   def self.find_or_create_by_name(name)
-    if self.find_by_name(name) == nil 
+    if self.find_by_name(name) == nil
       self.create(name)
     else
       self.find_by_name(name)
-    end 
-  end 
+    end
+  end
 
   def self.new_from_filename(file)
     file_name = file.chomp(".mp3").split(" - ")
@@ -56,10 +56,10 @@ class Song
     artist = Artist.find_or_create_by_name(file_name[0])
     genre = Genre.find_or_create_by_name(file_name[2])
     new_song = self.new(song, artist, genre)
-  end 
+  end
 
   def self.create_from_filename(file)
     new_song = self.new_from_filename(file)
     new_song.save
-  end 
+  end
 end  
